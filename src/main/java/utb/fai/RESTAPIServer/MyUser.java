@@ -1,18 +1,21 @@
 package utb.fai.RESTAPIServer;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "users")
 public class MyUser {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String phoneNumber;
 
     public MyUser() {}
@@ -23,18 +26,24 @@ public class MyUser {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean isUserDataValid(String phoneNumber, String email) {
-        // Add your validation logic here (e.g., email and phone number format
-        // validation)
-        // phone number must be 13 characters long and containing dialling code with +, email must contain "@" and "."
-        return phoneNumber.length() == 13 && email.contains("@") && email.contains(".") && !phoneNumber.contains("+");
+    public boolean isUserDataValid(String name, String phoneNumber, String email) {
+        if (name == null || name.isBlank()) {
+            return false;
+        }
+        if (phoneNumber == null || !phoneNumber.startsWith("+") || phoneNumber.length() != 13|| !phoneNumber.matches("\\+\\d+")) {
+            return false;
+        }
+        if (email == null || !email.contains("@") || !email.contains(".")) {
+            return false;
+        }
+        return true;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,7 +70,4 @@ public class MyUser {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-    // TODO: Getters and setters
-
 }
