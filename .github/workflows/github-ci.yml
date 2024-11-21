@@ -33,9 +33,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Debug build output
-        run: ls -R app/build/libs/
-
       - name: Save build artifacts
         if: success()
         uses: actions/upload-artifact@v3
@@ -61,9 +58,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: app-libs
-
-      - name: Debug downloaded artifacts
-        run: ls -R app/build/libs/
+          path: build/libs
 
       - name: Run black box tests
         run: java -jar NATT.jar -nc https://gitlab.com/ap5vs/test-config/restful-api-server-config/-/raw/main/test-config-6.yaml?ref_type=heads
